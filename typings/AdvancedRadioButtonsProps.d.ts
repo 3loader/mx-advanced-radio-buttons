@@ -10,6 +10,16 @@ export type OrientationEnum = "horizontal" | "vertical";
 
 export type ReadOnlyStyleEnum = "control" | "text";
 
+export interface CustomLabelsType {
+    attributeValueKey: string;
+    attributeValueNewCaption: string;
+}
+
+export interface CustomLabelsPreviewType {
+    attributeValueKey: string;
+    attributeValueNewCaption: string;
+}
+
 export interface AdvancedRadioButtonsContainerProps {
     name: string;
     class: string;
@@ -17,10 +27,13 @@ export interface AdvancedRadioButtonsContainerProps {
     tabIndex?: number;
     orientation: OrientationEnum;
     attributeValue: EditableValue<boolean | string>;
-    showLabel: boolean;
-    labelCaption?: DynamicValue<string>;
     readOnlyStyle: ReadOnlyStyleEnum;
     ariaRequired: boolean;
+    showLabel: boolean;
+    labelCaption?: DynamicValue<string>;
+    useCustomLabels: boolean;
+    customLabels: CustomLabelsType[];
+    removeOtherOptions: boolean;
 }
 
 export interface AdvancedRadioButtonsPreviewProps {
@@ -34,9 +47,12 @@ export interface AdvancedRadioButtonsPreviewProps {
     readOnly: boolean;
     orientation: OrientationEnum;
     attributeValue: string;
-    showLabel: boolean;
-    labelCaption: string;
     readOnlyStyle: ReadOnlyStyleEnum;
     ariaRequired: boolean;
+    showLabel: boolean;
+    labelCaption: string;
+    useCustomLabels: boolean;
+    customLabels: CustomLabelsPreviewType[];
+    removeOtherOptions: boolean;
     onChangeAction: {} | null;
 }

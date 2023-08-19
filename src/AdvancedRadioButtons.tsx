@@ -9,6 +9,7 @@ export function AdvancedRadioButtons(props: AdvancedRadioButtonsContainerProps):
     return <RadioButtons
         id={props.name}
         className={props.class}
+        style={props.style}
         value={props.attributeValue}
         readOnlyAsText={props.readOnlyStyle == 'text'}
         readOnly={props.attributeValue.readOnly}
@@ -17,6 +18,8 @@ export function AdvancedRadioButtons(props: AdvancedRadioButtonsContainerProps):
         showLabel={props.showLabel}
         labelCaption={props.labelCaption?.value}
         ariaRequired={props.ariaRequired}
-        style={props.style}
+        useCustomLabels={props.useCustomLabels}
+        customLabels={props.customLabels}
+        removeOtherOptions={props.removeOtherOptions}
     />;
 }

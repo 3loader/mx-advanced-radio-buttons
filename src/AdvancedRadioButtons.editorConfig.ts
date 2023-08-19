@@ -103,23 +103,24 @@ export function getProperties(_values: AdvancedRadioButtonsPreviewProps, default
     if (!_values.showLabel) {
         hidePropertyIn(defaultProperties, _values, "labelCaption");
     }
+    if (!_values.useCustomLabels) {
+        hidePropertyIn(defaultProperties, _values, "customLabels");
+        hidePropertyIn(defaultProperties, _values, "removeOtherOptions");
+    }
     return defaultProperties;
 }
 
-// export function check(_values: AdvancedRadioButtonsPreviewProps): Problem[] {
-//     const errors: Problem[] = [];
-//     // Add errors to the above array to throw errors in Studio and Studio Pro.
-//     /* Example
-//     if (values.myProperty !== "custom") {
-//         errors.push({
-//             property: `myProperty`,
-//             message: `The value of 'myProperty' is different of 'custom'.`,
-//             url: "https://github.com/myrepo/mywidget"
-//         });
-//     }
-//     */
-//     return errors;
-// }
+export function check(_values: AdvancedRadioButtonsPreviewProps): Problem[] {
+    const errors: Problem[] = [];
+    if (_values.useCustomLabels && _values.customLabels.length == 0) {
+        errors.push({
+            property: `customLabels`,
+            message: `At least one custom option label needs to be specified.`,
+            url: "https://github.com/3loader/mx-advanced-radio-buttons"
+        });
+    }
+    return errors;
+}
 
 export function getPreview(_values: AdvancedRadioButtonsPreviewProps, isDarkMode: boolean/*, version: number[]*/): PreviewProps {
     // Customize your pluggable widget appearance for Studio Pro.
@@ -174,7 +175,7 @@ export function getPreview(_values: AdvancedRadioButtonsPreviewProps, isDarkMode
                 type: "Text",
                 fontSize: 8.5,
                 fontColor: "#4473C4",
-                content: `[${_values.attributeValue}]`,
+                content: `[${_values.attributeValue ? _values.attributeValue : "No attribute selected"}]`,
             }
         ]
     }
@@ -243,6 +244,6 @@ export function getPreview(_values: AdvancedRadioButtonsPreviewProps, isDarkMode
     return parentContainer;
 }
 
-// export function getCustomCaption(values: AdvancedRadioButtonsPreviewProps, platform: Platform): string {
-//     return "AdvancedRadioButtons";
-// }
+export function getCustomCaption(_values: AdvancedRadioButtonsPreviewProps/*, platform: Platform*/): string {
+    return "Advanced Radio Buttons";
+}

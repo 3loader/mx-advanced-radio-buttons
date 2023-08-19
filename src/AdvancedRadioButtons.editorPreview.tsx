@@ -5,14 +5,17 @@ import { AdvancedRadioButtonsPreviewProps } from "../typings/AdvancedRadioButton
 export function preview(props: AdvancedRadioButtonsPreviewProps): ReactElement {
     return <RadioButtons
         className={props.class}
+        style={props.styleObject}
         readOnlyAsText={props.readOnlyStyle == 'text'}
         readOnly={props.readOnly}
         orientation={props.orientation}
         showLabel={props.showLabel}
         labelCaption={props.labelCaption}
-        previewValueAsText={`[${props.attributeValue}]`}
+        previewValueAsText={`[${props.attributeValue ? props.attributeValue : "No attribute selected"}]`}
         ariaRequired={props.ariaRequired}
-        style={props.styleObject}
+        useCustomLabels={props.useCustomLabels}
+        customLabels={props.customLabels}
+        removeOtherOptions={props.removeOtherOptions}
     />;
 }
 

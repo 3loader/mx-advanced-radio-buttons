@@ -1,6 +1,7 @@
 import { ReactElement, createElement, useRef, CSSProperties } from "react";
 import { EditableValue } from "mendix";
 import classNames from "classnames";
+import {CustomLabelsPreviewType, CustomLabelsType} from "../../typings/AdvancedRadioButtonsProps";
 
 export interface RadioButtonsProps {
     className?: string;
@@ -15,6 +16,9 @@ export interface RadioButtonsProps {
     showLabel: boolean;
     labelCaption?: string | undefined;
     ariaRequired: boolean;
+    useCustomLabels: boolean;
+    customLabels: CustomLabelsType[] | CustomLabelsPreviewType[];
+    removeOtherOptions: boolean;
 }
 
 export function RadioButtons(props: RadioButtonsProps): ReactElement {
@@ -29,6 +33,15 @@ export function RadioButtons(props: RadioButtonsProps): ReactElement {
 
     // We render this piece when input is not editable and value is shown as a text
     if (showOnlyText) {
+
+        let displayValue = props.value && props.value.displayValue ? props.value.displayValue : props.previewValueAsText;
+        if (props.useCustomLabels && props.value) {
+            const customLabel = props.customLabels.find(l => l.attributeValueKey == props.value?.value?.toString())
+            if (customLabel) {
+                displayValue = customLabel.attributeValueNewCaption;
+            }
+        }
+
         return (
             <div
                 aria-labelledby={labelledby}
@@ -40,7 +53,7 @@ export function RadioButtons(props: RadioButtonsProps): ReactElement {
                 {props.showLabel && props.labelCaption &&
                     <label className="control-label" htmlFor={props.id} id={`${props.id}-label`}>{props.labelCaption || ''}</label>
                 }
-                <div className="form-control-static">{(props.value && props.value.displayValue ? props.value.displayValue : props.previewValueAsText)}&nbsp;</div>
+                <div className="form-control-static">{displayValue}&nbsp;</div>
                 {props.value != undefined && props.value.validation && props.value.validation.length > 0 &&
                     <div id={`${props.id}-error`} className="alert alert-danger mx-validation-message" role={"alert"}>{props.value.validation}</div>
                 }
@@ -53,7 +66,17 @@ export function RadioButtons(props: RadioButtonsProps): ReactElement {
     const universe: (boolean | string)[] = props.value && props.value.universe ? props.value.universe : ["[Option 1]", "[Option 2] ..."];
     for (let i = 0; i < universe.length; i++) {
         const universeValue = universe[i];
-        const radioLabel = universeValue === true ? "Yes" : universeValue === false ? "No" : universeValue
+        let radioLabel = universeValue === true ? "Yes" : universeValue === false ? "No" : universeValue
+
+        if (props.useCustomLabels && props.value && props.value.universe) {
+            const customLabel = props.customLabels.find(l => l.attributeValueKey == universeValue.toString())
+            if (customLabel) {
+                radioLabel = customLabel.attributeValueNewCaption;
+            } else {
+                if (props.removeOtherOptions) break;
+            }
+        }
+
         // push jsx into array
         singleRadioJSX.push(
             <div className="radio">

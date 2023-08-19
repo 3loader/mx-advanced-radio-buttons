@@ -28,16 +28,6 @@
                     </attributeTypes>
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Label">
-                <property key="showLabel" type="boolean" defaultValue="true">
-                    <caption>Show label</caption>
-                    <description/>
-                </property>
-                <property key="labelCaption" type="textTemplate" required="false">
-                    <caption>Label caption</caption>
-                    <description/>
-                </property>
-            </propertyGroup>
             <propertyGroup caption="Editability">
                 <systemProperty key="Editability"/>
                 <property key="readOnlyStyle" type="enumeration" defaultValue="control">
@@ -56,6 +46,42 @@
                 <property key="ariaRequired" type="boolean" defaultValue="false">
                     <caption>Aria required</caption>
                     <description>Used by assistive technologies to indicate that a field is required</description>
+                </property>
+            </propertyGroup>
+        </propertyGroup>
+        <propertyGroup caption="Label">
+            <propertyGroup caption="Label">
+                <property key="showLabel" type="boolean" defaultValue="true">
+                    <caption>Show label</caption>
+                    <description/>
+                </property>
+                <property key="labelCaption" type="textTemplate" required="false">
+                    <caption>Label caption</caption>
+                    <description/>
+                </property>
+                <property key="useCustomLabels" type="boolean" defaultValue="false">
+                    <caption>Use custom option labels</caption>
+                    <description/>
+                </property>
+                <property key="customLabels" type="object" isList="true" required="false">
+                    <caption>Custom option labels</caption>
+                    <description/>
+                    <properties>
+                        <propertyGroup caption="Option label customization">
+                            <property key="attributeValueKey" type="string">
+                                <caption>Key to identify old label</caption>
+                                <description>Enumeration value if attribute is enumeration. "true" or "false" if attribute is boolean</description>
+                            </property>
+                            <property key="attributeValueNewCaption" type="string">
+                                <caption>New caption</caption>
+                                <description/>
+                            </property>
+                        </propertyGroup>
+                    </properties>
+                </property>
+                <property key="removeOtherOptions" type="boolean" defaultValue="false">
+                    <caption>Remove missing options</caption>
+                    <description/>
                 </property>
             </propertyGroup>
         </propertyGroup>

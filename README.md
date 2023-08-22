@@ -1,5 +1,5 @@
 ## Advanced Radio Buttons
-This widget is a mirror of default Mendix radio buttons widget. The purpose of it to serve as a base for adding new features while also maintaining compatibility with default widget.
+This widget is a mirror of default Mendix radio buttons widget with some additional features.
 
 ## Features
 **What you get:**
@@ -20,6 +20,7 @@ This widget is a mirror of default Mendix radio buttons widget. The purpose of i
 * Icon and tile for both dark and not-dark modes
 
 **What is not available** (mostly because of custom widgets limitations):
+* Widget id structurally differs from how default radio-button id looks like 
 * Read-only style does not have "Based on data view" option
 * Validation "Type" dropdown is missing
 * No "On enter" and "On change" events (They are useless in radio-buttons)

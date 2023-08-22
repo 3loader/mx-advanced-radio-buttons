@@ -1,4 +1,4 @@
-import { ReactElement, createElement } from "react";
+import { ReactElement, createElement, useId } from "react";
 import { RadioButtons } from "./components/RadioButtons";
 
 import { AdvancedRadioButtonsContainerProps } from "../typings/AdvancedRadioButtonsProps";
@@ -8,7 +8,7 @@ import "./ui/AdvancedRadioButtons.css";
 export function AdvancedRadioButtons(props: AdvancedRadioButtonsContainerProps): ReactElement {
     return (
         <RadioButtons
-            id={props.name}
+            id={`${useId()}-${props.name}`}
             className={props.class}
             style={props.style}
             value={props.attributeValue}

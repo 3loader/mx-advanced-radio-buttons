@@ -1,4 +1,4 @@
-import { ReactElement, createElement, useRef, CSSProperties } from "react";
+import { ReactElement, createElement, CSSProperties } from "react";
 import { EditableValue } from "mendix";
 import classNames from "classnames";
 import { CustomLabelsPreviewType, CustomLabelsType } from "../../typings/AdvancedRadioButtonsProps";
@@ -22,16 +22,9 @@ export interface RadioButtonsProps {
 }
 
 export function RadioButtons(props: RadioButtonsProps): ReactElement {
-    const onClickHandler = (newValue: boolean | string): void => {
-        if (!props.value) {
-            return;
-        }
-        props.value.setValue(newValue);
-    };
     const showOnlyText = props.readOnly && props.readOnlyAsText;
     const inlineClass = props.orientation === "horizontal" ? "inline" : "";
     const labelledby = `${props.id}-label`;
-    const inputRef = useRef(null);
 
     // We render this piece when input is not editable and value is shown as a text
     if (showOnlyText) {
@@ -68,6 +61,12 @@ export function RadioButtons(props: RadioButtonsProps): ReactElement {
     }
 
     // We render this piece when input is editable
+    const onClickHandler = (newValue: boolean | string): void => {
+        if (!props.value) {
+            return;
+        }
+        props.value.setValue(newValue);
+    };
     const singleRadioJSX: ReactElement[] = [];
     const universe: Array<boolean | string> =
         props.value && props.value.universe ? props.value.universe : ["[Option 1]", "[Option 2] ..."];
@@ -91,7 +90,6 @@ export function RadioButtons(props: RadioButtonsProps): ReactElement {
             <div className="radio">
                 <input
                     id={`${props.id}_${i}`}
-                    ref={inputRef}
                     name={props.id}
                     type="radio"
                     value={universeValue.toString()}

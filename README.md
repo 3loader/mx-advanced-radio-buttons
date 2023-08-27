@@ -3,6 +3,7 @@ This widget is a mirror of default Mendix radio buttons widget with some additio
 
 ## Features
 **What you get:**
+* Form orientation (Horizontal, Vertical)
 * Orientation (Horizontal, Vertical)
 * Data source: boolean or enumeration attribute
 * Label same as default also with aria-labeled attribute

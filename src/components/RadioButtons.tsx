@@ -146,12 +146,11 @@ export function RadioButtons(props: RadioButtonsProps): ReactElement {
 
         if (props.useCustomLabels && props.value && props.value.universe) {
             const customLabel = props.customLabels.find(l => l.attributeValueKey === universeValue.toString());
+            if (!customLabel && props.removeOtherOptions) {
+                continue;
+            }
             if (customLabel) {
                 radioLabel = customLabel.attributeValueNewCaption;
-            } else {
-                if (props.removeOtherOptions) {
-                    break;
-                }
             }
         }
 

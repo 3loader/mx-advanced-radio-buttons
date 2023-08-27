@@ -45,7 +45,7 @@ Using custom labels for options:
     * In case of boolean it should be either _true_ or _false_
     * If you want you can remove undesirable selection options
       * Select "Remove missing options"
-      * All options that were not specified in "Custom option labels" section will not show
+      * All options that were not specified in "Custom option labels" section will not be shown
 
 ## Issues, suggestions and feature requests
 https://github.com/3loader/mx-advanced-radio-buttons/issues

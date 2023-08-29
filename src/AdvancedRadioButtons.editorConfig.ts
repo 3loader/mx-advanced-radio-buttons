@@ -35,103 +35,123 @@ export type Problem = {
 };
 
 type BaseProps = {
-  type: "Image" | "Container" | "RowLayout" | "Text" | "DropZone" | "Selectable" | "Datasource";
-  grow?: number; // optionally sets a growth factor if used in a layout (default = 1)
-}
+    type: "Image" | "Container" | "RowLayout" | "Text" | "DropZone" | "Selectable" | "Datasource";
+    grow?: number; // optionally sets a growth factor if used in a layout (default = 1)
+};
 
 type ImageProps = BaseProps & {
-  type: "Image";
-  document?: string; // svg image
-  data?: string; // base64 image
-  property?: object; // widget image property object from Values API
-  width?: number; // sets a fixed maximum width
-  height?: number; // sets a fixed maximum height
-}
+    type: "Image";
+    document?: string; // svg image
+    data?: string; // base64 image
+    property?: object; // widget image property object from Values API
+    width?: number; // sets a fixed maximum width
+    height?: number; // sets a fixed maximum height
+};
 
 type ContainerProps = BaseProps & {
-  type: "Container" | "RowLayout";
-  children: PreviewProps[]; // any other preview element
-  borders?: boolean; // sets borders around the layout to visually group its children
-  borderRadius?: number; // integer. Can be used to create rounded borders
-  backgroundColor?: string; // HTML color, formatted #RRGGBB
-  borderWidth?: number; // sets the border width
-  padding?: number; // integer. adds padding around the container
-}
+    type: "Container" | "RowLayout";
+    children: PreviewProps[]; // any other preview element
+    borders?: boolean; // sets borders around the layout to visually group its children
+    borderRadius?: number; // integer. Can be used to create rounded borders
+    backgroundColor?: string; // HTML color, formatted #RRGGBB
+    borderWidth?: number; // sets the border width
+    padding?: number; // integer. adds padding around the container
+};
 
 type RowLayoutProps = ContainerProps & {
-  type: "RowLayout";
-  columnSize?: "fixed" | "grow" // default is fixed
-}
+    type: "RowLayout";
+    columnSize?: "fixed" | "grow"; // default is fixed
+};
 
 type TextProps = BaseProps & {
-  type: "Text";
-  content: string; // text that should be shown
-  fontSize?: number; // sets the font size
-  fontColor?: string; // HTML color, formatted #RRGGBB
-  bold?: boolean;
-  italic?: boolean;
-}
+    type: "Text";
+    content: string; // text that should be shown
+    fontSize?: number; // sets the font size
+    fontColor?: string; // HTML color, formatted #RRGGBB
+    bold?: boolean;
+    italic?: boolean;
+};
 
 type DropZoneProps = BaseProps & {
-  type: "DropZone";
-  property: object; // widgets property object from Values API
-  placeholder: string; // text to be shown inside the dropzone when empty
-  showDataSourceHeader?: boolean; // true by default. Toggles whether to show a header containing information about the datasource
-}
-
+    type: "DropZone";
+    property: object; // widgets property object from Values API
+    placeholder: string; // text to be shown inside the dropzone when empty
+    showDataSourceHeader?: boolean; // true by default. Toggles whether to show a header containing information about the datasource
+};
 
 type SelectableProps = BaseProps & {
-  type: "Selectable";
-  object: object; // object property instance from the Value API
-  child: PreviewProps; // any type of preview property to visualize the object instance
-}
+    type: "Selectable";
+    object: object; // object property instance from the Value API
+    child: PreviewProps; // any type of preview property to visualize the object instance
+};
 
 type DatasourceProps = BaseProps & {
-  type: "Datasource";
-  property: object | null; // datasource property object from Values API
-  child?: PreviewProps; // any type of preview property component (optional)
-}
+    type: "Datasource";
+    property: object | null; // datasource property object from Values API
+    child?: PreviewProps; // any type of preview property component (optional)
+};
 
-export type PreviewProps = ImageProps | ContainerProps | RowLayoutProps | TextProps | DropZoneProps | SelectableProps | DatasourceProps;
+export type PreviewProps =
+    | ImageProps
+    | ContainerProps
+    | RowLayoutProps
+    | TextProps
+    | DropZoneProps
+    | SelectableProps
+    | DatasourceProps;
 
 // export function getProperties(values: ValuesAPI, defaultConfiguration: Properties): Properties {
 //     return defaultConfiguration;
 // }
 
-export function getProperties(_values: AdvancedRadioButtonsPreviewProps, defaultProperties: Properties/*, target: Platform*/): Properties {
+export function getProperties(
+    _values: AdvancedRadioButtonsPreviewProps,
+    defaultProperties: Properties /* , target: Platform */
+): Properties {
     // Do the values manipulation here to control the visibility of properties in Studio and Studio Pro conditionally.
+    if (_values.formOrientation === "vertical") {
+        hidePropertyIn(defaultProperties, _values, "labelWidth");
+    }
     if (!_values.showLabel) {
         hidePropertyIn(defaultProperties, _values, "labelCaption");
+    }
+    if (!_values.useCustomLabels) {
+        hidePropertyIn(defaultProperties, _values, "customLabels");
+        hidePropertyIn(defaultProperties, _values, "removeOtherOptions");
     }
     return defaultProperties;
 }
 
-// export function check(_values: AdvancedRadioButtonsPreviewProps): Problem[] {
-//     const errors: Problem[] = [];
-//     // Add errors to the above array to throw errors in Studio and Studio Pro.
-//     /* Example
-//     if (values.myProperty !== "custom") {
-//         errors.push({
-//             property: `myProperty`,
-//             message: `The value of 'myProperty' is different of 'custom'.`,
-//             url: "https://github.com/myrepo/mywidget"
-//         });
-//     }
-//     */
-//     return errors;
-// }
+export function check(_values: AdvancedRadioButtonsPreviewProps): Problem[] {
+    const errors: Problem[] = [];
+    if (
+        _values.labelWidth !== null &&
+        _values.labelWidth !== undefined &&
+        (_values.labelWidth > 11 || _values.labelWidth < 1)
+    ) {
+        errors.push({
+            property: `labelWidth`,
+            message: `Label width should be between 1 and 11`,
+            url: "https://github.com/3loader/mx-advanced-radio-buttons"
+        });
+    }
+    if (_values.useCustomLabels && _values.customLabels.length === 0) {
+        errors.push({
+            property: `customLabels`,
+            message: `At least one custom option label needs to be specified.`,
+            url: "https://github.com/3loader/mx-advanced-radio-buttons"
+        });
+    }
+    return errors;
+}
 
-export function getPreview(_values: AdvancedRadioButtonsPreviewProps, isDarkMode: boolean/*, version: number[]*/): PreviewProps {
-    // Customize your pluggable widget appearance for Studio Pro.
-    // function textBlock(textValue: string): TextProps {
-    //     return {
-    //         type: "Text",
-    //         content: textValue
-    //     }
-    // }
-    const circleFill = isDarkMode ? "transparent" : "rgb(234,241,247)"
-    const circleStroke = isDarkMode ? "rgb(86, 86, 86)" : "rgb(210,210,210)"
-    const disabledCircleColor = isDarkMode ? "rgb(86, 86, 86)" : "rgb(210,210,210)"
+export function getPreview(
+    _values: AdvancedRadioButtonsPreviewProps,
+    isDarkMode: boolean /* , version: number[] */
+): PreviewProps {
+    const circleFill = isDarkMode ? "transparent" : "rgb(234,241,247)";
+    const circleStroke = isDarkMode ? "rgb(86, 86, 86)" : "rgb(210,210,210)";
+    const disabledCircleColor = isDarkMode ? "rgb(86, 86, 86)" : "rgb(210,210,210)";
     const circleSvgImage = `
 <svg height="64" width="64">
     <circle cx="32" cy="32" r="28" stroke="${circleStroke}" stroke-width="1" fill="${circleFill}" />
@@ -150,7 +170,7 @@ export function getPreview(_values: AdvancedRadioButtonsPreviewProps, isDarkMode
                     width: 16
                 }
             ]
-        }
+        };
     }
     function valueText(val: string): ContainerProps {
         return {
@@ -158,41 +178,43 @@ export function getPreview(_values: AdvancedRadioButtonsPreviewProps, isDarkMode
             children: [
                 {
                     type: "Text",
-                    content: val,
+                    content: val
                 }
             ]
-        }
+        };
     }
     const parentContainer: PreviewProps = {
-        type: "Container",
+        type: _values.formOrientation === "horizontal" ? "RowLayout" : "Container",
         children: []
-    }
+    };
     const attributeNameBlock: ContainerProps = {
         type: "Container",
         children: [
             {
                 type: "Text",
                 fontSize: 8.5,
-                fontColor: "#4473C4",
-                content: `[${_values.attributeValue}]`,
+                fontColor: "#569CF9",
+                content: `[${_values.attributeValue ? _values.attributeValue : "No attribute selected"}]`
             }
         ]
-    }
+    };
     if (_values.showLabel && _values.labelCaption && _values.labelCaption.length > 0) {
         const labelProp: ContainerProps = {
-            type: "Container",
+            type: _values.formOrientation === "horizontal" ? "RowLayout" : "Container",
+            grow: _values.labelWidth || 1,
             children: [
                 {
                     type: "Text",
-                    content: _values.labelCaption,
+                    content: _values.labelCaption
                 }
             ]
-        }
+        };
         parentContainer.children.push(labelProp);
     }
-    if (_values.orientation == "horizontal") {
+    if (_values.orientation === "horizontal") {
         parentContainer.children.push({
             type: "RowLayout",
+            grow: _values.labelWidth ? 12 - _values.labelWidth : 1,
             columnSize: "grow",
             children: [
                 valueCircle(),
@@ -204,9 +226,10 @@ export function getPreview(_values: AdvancedRadioButtonsPreviewProps, isDarkMode
             ]
         });
     }
-    if (_values.orientation == "vertical") {
+    if (_values.orientation === "vertical") {
         parentContainer.children.push({
             type: "Container",
+            grow: _values.labelWidth ? 12 - _values.labelWidth : 1,
             children: [
                 {
                     type: "Container",
@@ -236,13 +259,13 @@ export function getPreview(_values: AdvancedRadioButtonsPreviewProps, isDarkMode
                             ]
                         }
                     ]
-                },
+                }
             ]
         });
     }
     return parentContainer;
 }
 
-// export function getCustomCaption(values: AdvancedRadioButtonsPreviewProps, platform: Platform): string {
-//     return "AdvancedRadioButtons";
-// }
+export function getCustomCaption(_values: AdvancedRadioButtonsPreviewProps /* , platform: Platform */): string {
+    return "Advanced Radio Buttons";
+}

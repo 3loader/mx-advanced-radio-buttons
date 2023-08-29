@@ -6,21 +6,38 @@
 import { CSSProperties } from "react";
 import { DynamicValue, EditableValue } from "mendix";
 
+export type FormOrientationEnum = "horizontal" | "vertical";
+
 export type OrientationEnum = "horizontal" | "vertical";
 
 export type ReadOnlyStyleEnum = "control" | "text";
+
+export interface CustomLabelsType {
+    attributeValueKey: string;
+    attributeValueNewCaption: string;
+}
+
+export interface CustomLabelsPreviewType {
+    attributeValueKey: string;
+    attributeValueNewCaption: string;
+}
 
 export interface AdvancedRadioButtonsContainerProps {
     name: string;
     class: string;
     style?: CSSProperties;
     tabIndex?: number;
+    formOrientation: FormOrientationEnum;
+    labelWidth: number;
     orientation: OrientationEnum;
     attributeValue: EditableValue<boolean | string>;
-    showLabel: boolean;
-    labelCaption?: DynamicValue<string>;
     readOnlyStyle: ReadOnlyStyleEnum;
     ariaRequired: boolean;
+    showLabel: boolean;
+    labelCaption?: DynamicValue<string>;
+    useCustomLabels: boolean;
+    customLabels: CustomLabelsType[];
+    removeOtherOptions: boolean;
 }
 
 export interface AdvancedRadioButtonsPreviewProps {
@@ -32,11 +49,16 @@ export interface AdvancedRadioButtonsPreviewProps {
     style: string;
     styleObject?: CSSProperties;
     readOnly: boolean;
+    formOrientation: FormOrientationEnum;
+    labelWidth: number | null;
     orientation: OrientationEnum;
     attributeValue: string;
-    showLabel: boolean;
-    labelCaption: string;
     readOnlyStyle: ReadOnlyStyleEnum;
     ariaRequired: boolean;
+    showLabel: boolean;
+    labelCaption: string;
+    useCustomLabels: boolean;
+    customLabels: CustomLabelsPreviewType[];
+    removeOtherOptions: boolean;
     onChangeAction: {} | null;
 }

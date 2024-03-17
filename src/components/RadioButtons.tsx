@@ -2,6 +2,7 @@ import { ReactElement, createElement, CSSProperties } from "react";
 import { EditableValue } from "mendix";
 import classNames from "classnames";
 import { CustomLabelsPreviewType, CustomLabelsType } from "../../typings/AdvancedRadioButtonsProps";
+import { Alert } from "./Alert";
 
 export interface RadioButtonsProps {
     className?: string;
@@ -31,12 +32,6 @@ interface ControlLabelProps {
     labelWidth?: number;
 }
 
-interface AlertMessageProps {
-    id?: string;
-    alertMessage?: string;
-    showAlertMessage: boolean;
-}
-
 function ControlLabel(props: ControlLabelProps): ReactElement | null {
     const labelWidthClass = props.showLabelInColumn ? `col-sm-${props.labelWidth}` : "";
     const controlLabelClass = classNames("control-label", labelWidthClass);
@@ -49,17 +44,6 @@ function ControlLabel(props: ControlLabelProps): ReactElement | null {
         <label className={controlLabelClass} htmlFor={props.id} id={`${props.id}-label`}>
             {props.labelCaption || ""}
         </label>
-    );
-}
-
-function AlertMessage(props: AlertMessageProps): ReactElement | null {
-    if (!props.showAlertMessage) {
-        return null;
-    }
-    return (
-        <div id={`${props.id}-error`} className="alert alert-danger mx-validation-message" role={"alert"}>
-            {props.alertMessage}
-        </div>
     );
 }
 
@@ -94,7 +78,7 @@ export function RadioButtons(props: RadioButtonsProps): ReactElement {
         />
     );
     const alertMessageElement = (
-        <AlertMessage showAlertMessage={hasError} id={props.id} alertMessage={props.value?.validation || ""} />
+        <Alert id={props.id} className="mx-validation-message" bootstrapStyle="danger" message={props.value?.validation || ""} />
     );
     formGroupContent.push(controlLabelElement);
 
